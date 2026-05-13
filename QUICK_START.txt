@@ -1,0 +1,378 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                  🎯 QUIZR - TIMED QUIZ PLATFORM                            ║
+║                     COMPLETE SETUP INSTRUCTIONS                            ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+⚡ FASTEST WAY TO GET RUNNING (3 MINUTES)
+═══════════════════════════════════════════════════════════════════════════════
+
+On WINDOWS:
+───────────
+1. Open Command Prompt in the quiz-platform folder
+2. Type:  start-windows.bat
+3. Wait 30 seconds, two windows will open
+4. Your app is at: http://localhost:3000
+
+On MAC or LINUX:
+────────────────
+1. Open Terminal in the quiz-platform folder
+2. Type:  chmod +x start.sh && ./start.sh
+3. Wait 30 seconds for "Both servers are running" message
+4. Your app is at: http://localhost:3000
+
+
+📋 MANUAL SETUP (If Scripts Don't Work)
+═══════════════════════════════════════════════════════════════════════════════
+
+TERMINAL 1 - Start Backend Server:
+──────────────────────────────────
+
+$ cd quiz-platform/server
+$ npm install
+$ npm start
+
+Wait for: 🚀 Quiz Platform API running at http://localhost:3001
+
+
+TERMINAL 2 - Start Frontend Server:
+──────────────────────────────────
+
+$ cd quiz-platform/client
+$ npm install
+$ npm start
+
+Wait for: On Your Network: http://localhost:3000
+
+Browser auto-opens → You're done! 🎉
+
+
+🎮 USING THE APPLICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+QUIZ MODE (Default):
+─────────────────────
+1. See a random coding question
+2. Read the question (markdown with syntax highlighting)
+3. Timer counts down (top right circle)
+4. Click "Reveal Answer" or let timer expire
+5. See the solution
+6. Click "Next Question" for another one
+7. Filter by topic or difficulty using dropdowns
+
+ADMIN MODE (Gear Icon ⚙️):
+──────────────────────────
+1. Click gear icon in bottom-right corner
+2. Fill in a new question:
+   - Topic: Python, C++, SQL, etc.
+   - Question: Write in markdown (with code blocks)
+   - Answer: Solution in markdown
+   - Difficulty: Easy / Medium / Hard
+   - Timer: Number of seconds
+3. Click "Create"
+4. Edit existing questions or delete them
+5. Search for questions
+
+
+✨ KEY FEATURES
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Timed countdown for each question
+✓ Auto-reveal answer when time expires
+✓ Markdown rendering (tables, lists, formatting)
+✓ Syntax highlighting for code blocks (Python, C++, SQL, etc.)
+✓ Create, read, update, delete questions
+✓ Filter by topic and difficulty
+✓ Dark theme with neon accent colors
+✓ Responsive design (mobile friendly)
+✓ SQLite database (local, no setup needed)
+
+
+📁 PROJECT STRUCTURE (What's What)
+═══════════════════════════════════════════════════════════════════════════════
+
+quiz-platform/
+│
+├─ server/                           ← Backend (Node.js/Express)
+│  ├─ index.js                       ← Main server file
+│  ├─ package.json                   ← Dependencies
+│  └─ database/
+│     └─ setup.js                    ← SQLite database
+│
+├─ client/                           ← Frontend (React)
+│  ├─ src/
+│  │  ├─ App.jsx                     ← Main app
+│  │  ├─ api.js                      ← API calls
+│  │  ├─ pages/
+│  │  │  ├─ QuizPage.jsx             ← Quiz interface
+│  │  │  └─ AdminPage.jsx            ← Admin panel
+│  │  └─ components/
+│  │     ├─ MarkdownRenderer.jsx
+│  │     ├─ MarkdownEditor.jsx
+│  │     ├─ TimerRing.jsx
+│  │     └─ DifficultyBadge.jsx
+│  ├─ package.json
+│  └─ tailwind.config.js
+│
+├─ README.md                         ← Full documentation
+├─ SETUP_GUIDE.txt                   ← Detailed setup guide
+└─ start.sh / start-windows.bat      ← Automated start scripts
+
+
+🔌 INCLUDED SAMPLE QUESTIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+When you start, the database auto-seeds with these:
+
+PYTHON:
+  • Two Sum - Array problems with hash maps
+  • LRU Cache - Complex data structure design
+
+C++:
+  • Valid Parentheses - Stack-based problems
+  • Reverse Linked List - Iterative & recursive solutions
+
+SQL:
+  • Second Highest Salary - Window functions
+  • Top 3 Salaries per Department - Advanced grouping
+
+Each question has:
+  ✓ Markdown-formatted description
+  ✓ Code examples with syntax highlighting
+  ✓ Full solution with explanation
+  ✓ Time limit (45-120 seconds)
+  ✓ Difficulty level
+
+
+🛠️ TECH STACK
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend:
+  • Node.js - JavaScript runtime
+  • Express.js - Web framework
+  • SQLite3 - Database
+  • CORS - Cross-origin support
+
+Frontend:
+  • React 18 - UI library
+  • Tailwind CSS - Styling
+  • react-markdown - Markdown rendering
+  • highlight.js - Code syntax highlighting
+
+
+⚙️ IMPORTANT PORTS
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend:   http://localhost:3001
+Frontend:  http://localhost:3000
+
+If these ports are already in use, you'll see an error.
+See TROUBLESHOOTING section below for how to change ports.
+
+
+❌ TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEM: "Port 3000 already in use"
+SOLUTION: 
+  • Close other applications using port 3000
+  • Or change the frontend port:
+    Windows: set PORT=3002 && npm start
+    Mac/Linux: PORT=3002 npm start
+
+PROBLEM: "Port 3001 already in use"
+SOLUTION:
+  • Close other applications using port 3001
+  • Or change backend port:
+    Windows: set PORT=3002 && node index.js
+    Mac/Linux: PORT=3002 node index.js
+
+PROBLEM: "npm: command not found"
+SOLUTION:
+  • Install Node.js: https://nodejs.org/
+  • Make sure to add to PATH during installation
+  • Restart terminal/command prompt
+  • Verify: node --version (should show v14+)
+
+PROBLEM: Database errors or missing questions
+SOLUTION:
+  • Delete: server/quiz.db
+  • Restart backend server
+  • Database will auto-recreate with sample data
+
+PROBLEM: Frontend can't connect to backend (CORS errors)
+SOLUTION:
+  • Make sure both servers are running
+  • Check http://localhost:3001/health in browser
+  • Backend must be on 3001, frontend on 3000
+
+PROBLEM: "npm install" takes too long or fails
+SOLUTION:
+  • Try clearing npm cache: npm cache clean --force
+  • Delete node_modules folder and package-lock.json
+  • Run npm install again
+  • Check your internet connection
+
+
+✅ VERIFY EVERYTHING IS WORKING
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Both terminals show no errors
+2. http://localhost:3001/health shows: {"status":"ok",...}
+3. Browser at http://localhost:3000 shows quiz
+4. You can see a coding question
+5. Timer counts down
+6. You can click "Reveal Answer"
+7. You can click gear icon (⚙️) to see admin panel
+8. You can create a new question
+
+
+🎓 EXAMPLE: CREATE YOUR FIRST QUESTION
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Click the ⚙️ gear icon in bottom right
+2. Click "New Question" button
+3. Fill in:
+
+   Topic: JavaScript
+   
+   Difficulty: easy
+   
+   Timer: 45
+   
+   Question (click WRITE tab):
+   ────────────────────────────
+   ## Reverse an Array
+   
+   Write a function to reverse an array in-place.
+   
+   ```javascript
+   const arr = [1, 2, 3, 4, 5];
+   reverseArray(arr);
+   console.log(arr); // [5, 4, 3, 2, 1]
+   ```
+
+   Answer (click WRITE tab):
+   ────────────────────────
+   ## Solution
+   
+   Use two pointers (left and right) and swap:
+   
+   ```javascript
+   function reverseArray(arr) {
+     let left = 0, right = arr.length - 1;
+     while (left < right) {
+       [arr[left], arr[right]] = [arr[right], arr[left]];
+       left++;
+       right--;
+     }
+   }
+   ```
+   
+   **Complexity:** O(n) time, O(1) space
+
+4. Click [Create]
+5. Your question now appears in the quiz! 🎉
+
+
+📖 MARKDOWN SUPPORT
+═══════════════════════════════════════════════════════════════════════════════
+
+You can use full markdown in questions and answers:
+
+Code Blocks (syntax highlighted):
+  ```python
+  def hello():
+      return "world"
+  ```
+
+  ```cpp
+  int main() { return 0; }
+  ```
+
+  ```sql
+  SELECT * FROM users;
+  ```
+
+Tables:
+  | Language | Type      |
+  |----------|-----------|
+  | Python   | Dynamic   |
+  | C++      | Compiled  |
+
+Formatting:
+  **Bold text**
+  *Italic text*
+  ~~Strikethrough~~
+  `inline code`
+  [Links](https://example.com)
+
+Lists:
+  - Item 1
+  - Item 2
+    - Nested item
+
+Headings:
+  # Heading 1
+  ## Heading 2
+  ### Heading 3
+
+Blockquotes:
+  > This is important
+  > Information
+
+
+🚀 DEPLOYING (If You Want to Share)
+═══════════════════════════════════════════════════════════════════════════════
+
+To deploy this application online:
+
+Backend:
+  • Heroku, Railway, Render, or any Node.js host
+  • Need to update frontend API URL in client/src/api.js
+
+Frontend:
+  • Netlify, Vercel, GitHub Pages
+  • Run: npm run build
+  • Deploy the build/ folder
+
+For detailed deployment guide, see README.md
+
+
+🆘 NEED HELP?
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Read README.md - Complete documentation
+2. Read SETUP_GUIDE.txt - Detailed walkthrough
+3. Check browser console (F12 → Console tab) for errors
+4. Check terminal output for error messages
+5. Verify:
+   - Node.js is installed: node --version
+   - npm works: npm --version
+   - Ports are available: lsof -i :3000
+
+
+💾 FILE LOCATIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+Database:           server/quiz.db
+Questions seed:     server/database/setup.js
+Backend code:       server/index.js
+Frontend code:      client/src/App.jsx
+Styles:             client/src/index.css
+               +    client/tailwind.config.js
+
+Dependencies:       server/node_modules/
+                   client/node_modules/
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           YOU'RE ALL SET! 🚀
+
+                    Run: ./start.sh (Mac/Linux) or
+                         start-windows.bat (Windows)
+
+                    Then visit: http://localhost:3000
+═══════════════════════════════════════════════════════════════════════════════

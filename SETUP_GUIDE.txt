@@ -1,0 +1,462 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                     QUIZR PLATFORM - SETUP GUIDE                            ║
+║                                                                              ║
+║         Timed Quiz & Coding Practice with Markdown & Syntax Highlighting    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+📋 PREREQUISITES
+═══════════════════════════════════════════════════════════════════════════════
+
+Before starting, ensure you have:
+
+  ✓ Node.js v14+ installed
+    └─ Download: https://nodejs.org/
+    
+  ✓ A code editor (VS Code recommended)
+    └─ Download: https://code.visualstudio.com/
+    
+  ✓ This entire quiz-platform folder
+
+
+🚀 QUICK START (3 WAYS)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─ METHOD 1: Automated Script (EASIEST) ────────────────────────────────────┐
+│                                                                             │
+│ WINDOWS:                                                                    │
+│   1. Open Command Prompt in the quiz-platform folder                      │
+│   2. Type:  start-windows.bat                                             │
+│   3. Two new windows will open automatically                              │
+│      - Backend on http://localhost:3001                                   │
+│      - Frontend on http://localhost:3000                                  │
+│                                                                             │
+│ MAC / LINUX:                                                                │
+│   1. Open Terminal in the quiz-platform folder                            │
+│   2. Type:  chmod +x start.sh                                             │
+│   3. Type:  ./start.sh                                                    │
+│   4. Wait for "Both servers are running" message                          │
+│      - Backend on http://localhost:3001                                   │
+│      - Frontend on http://localhost:3000                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ METHOD 2: Manual Step-by-Step (MOST FLEXIBLE) ──────────────────────────┐
+│                                                                             │
+│ STEP 1: Install Backend Dependencies                                      │
+│ ────────────────────────────────────                                      │
+│   $ cd quiz-platform/server                                               │
+│   $ npm install                                                           │
+│   (Wait 1-2 minutes)                                                      │
+│                                                                             │
+│ STEP 2: Install Frontend Dependencies                                     │
+│ ──────────────────────────────────────                                    │
+│   $ cd ../client                                                          │
+│   $ npm install                                                           │
+│   (Wait 2-3 minutes)                                                      │
+│                                                                             │
+│ STEP 3: Start Backend (in terminal 1)                                     │
+│ ──────────────────────────────────────                                    │
+│   $ cd ../server                                                          │
+│   $ npm start                                                             │
+│                                                                             │
+│   Expected output:                                                        │
+│   🚀 Quiz Platform API running at http://localhost:3001                  │
+│                                                                             │
+│ STEP 4: Start Frontend (in terminal 2)                                    │
+│ ───────────────────────────────────────                                   │
+│   $ cd client                                                             │
+│   $ npm start                                                             │
+│                                                                             │
+│   Browser automatically opens to http://localhost:3000                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ METHOD 3: Docker (ADVANCED - if you have Docker) ────────────────────────┐
+│                                                                             │
+│ Coming soon! For now, use Method 1 or 2.                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+📂 FOLDER STRUCTURE (What Each File Does)
+═══════════════════════════════════════════════════════════════════════════════
+
+quiz-platform/
+│
+├── 📄 README.md                     ← Full documentation
+├── 📄 SETUP_GUIDE.txt              ← This file
+├── start.sh                         ← Run this on Mac/Linux
+├── start-windows.bat                ← Run this on Windows
+│
+├── 📁 server/                       ← BACKEND (Express.js)
+│   ├── 📄 index.js                  ← Main server file
+│   ├── 📄 package.json              ← Dependencies
+│   └── 📁 database/
+│       └── 📄 setup.js              ← SQLite database
+│
+└── 📁 client/                       ← FRONTEND (React)
+    ├── 📄 src/
+    │   ├── 📄 App.jsx               ← Main component
+    │   ├── 📄 api.js                ← API calls
+    │   ├── 📁 pages/
+    │   │   ├── QuizPage.jsx         ← Quiz interface
+    │   │   └── AdminPage.jsx        ← Admin panel
+    │   └── 📁 components/
+    │       ├── MarkdownRenderer.jsx
+    │       ├── MarkdownEditor.jsx
+    │       ├── TimerRing.jsx
+    │       └── DifficultyBadge.jsx
+    ├── 📄 package.json
+    ├── 📄 tailwind.config.js
+    └── 📁 public/
+        └── index.html
+
+
+🎯 WHAT HAPPENS WHEN YOU START
+═══════════════════════════════════════════════════════════════════════════════
+
+1️⃣  BACKEND STARTS (Port 3001)
+    ├─ Creates SQLite database at: server/quiz.db
+    ├─ Seeds 6 example questions (Python, C++, SQL)
+    ├─ Listens for API requests
+    └─ Status: http://localhost:3001/health
+
+2️⃣  FRONTEND STARTS (Port 3000)
+    ├─ Webpack builds React app
+    ├─ Browser auto-opens to http://localhost:3000
+    ├─ Connects to backend API at http://localhost:3001
+    └─ You see the Quiz page with a random question
+
+3️⃣  YOU CAN NOW:
+    ├─ Take timed quizzes ⏱️
+    ├─ Filter by topic/difficulty 🔍
+    ├─ Click gear icon (⚙️) for admin panel
+    ├─ Create/edit/delete questions ✏️
+    └─ Use markdown & code syntax highlighting 📝
+
+
+💡 COMMON ISSUES & FIXES
+═══════════════════════════════════════════════════════════════════════════════
+
+ISSUE: "Port 3000 already in use"
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SOLUTION:                                                               │
+│   Windows: netstat -ano | findstr :3000                               │
+│            taskkill /PID <PID> /F                                      │
+│                                                                         │
+│   Mac/Linux: lsof -i :3000                                            │
+│             kill -9 <PID>                                             │
+│                                                                         │
+│ OR: Change port in client/src/api.js line 1                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ISSUE: "Port 3001 already in use"
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SOLUTION:                                                               │
+│   Windows: netstat -ano | findstr :3001                               │
+│            taskkill /PID <PID> /F                                      │
+│                                                                         │
+│   Mac/Linux: lsof -i :3001                                            │
+│             kill -9 <PID>                                             │
+│                                                                         │
+│ OR: Start backend on different port:                                   │
+│     PORT=3002 npm start                                               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ISSUE: "npm command not found" or "npm: command not found"
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SOLUTION: Node.js is not installed or not in PATH                      │
+│   1. Download Node.js: https://nodejs.org/                            │
+│   2. Install it (choose LTS version)                                  │
+│   3. Restart your terminal                                            │
+│   4. Verify: type "node --version"                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ISSUE: "Cannot find module" errors
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SOLUTION: Dependencies not installed                                    │
+│   1. In server folder: rm -rf node_modules && npm install            │
+│   2. In client folder: rm -rf node_modules && npm install            │
+│   3. Try again                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ISSUE: Database errors or questions missing
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SOLUTION: Reinitialize database                                        │
+│   1. Delete: server/quiz.db                                           │
+│   2. Restart backend server                                           │
+│   3. Database will auto-create with sample data                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ISSUE: Frontend not connecting to backend (CORS errors)
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SOLUTION:                                                               │
+│   1. Verify backend is running (check terminal)                       │
+│   2. Check http://localhost:3001/health in browser                   │
+│   3. Both must be running on correct ports                           │
+│   4. Check network in browser dev tools (F12)                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+🎨 USING THE PLATFORM
+═══════════════════════════════════════════════════════════════════════════════
+
+QUIZ MODE (Main Screen)
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                         │
+│  [🐍 Python] [EASY] [60s limit]          [Timer Ring: 45s]           │
+│                                                                         │
+│  ## Two Sum                                                             │
+│  Given an array of integers...                                         │
+│  Return indices of two numbers that add up to target.                 │
+│                                                                         │
+│  [Code block with syntax highlighting]                                │
+│                                                                         │
+│  ────────────────────────────────────────────────────────────────────  │
+│  ⏱ Timer running...      [Reveal Answer →]                           │
+│                                                                         │
+│  ✓ ANSWER                                                              │
+│  [Solution code]                                                       │
+│                                                                         │
+│  ┌────────────────────────────────────────────────────────────────┐  │
+│  │         [Next Question →]                                      │  │
+│  └────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│  FILTERS: [All Topics ▼] [All Levels ▼]                             │
+│  STREAK:  🔥 5 correct                                               │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ADMIN MODE (Click ⚙️ button)
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                         │
+│  ┌─ FORM PANEL ─────────────────┐  ┌─ QUESTIONS LIST ──────────────┐ │
+│  │                               │  │                               │ │
+│  │ NEW QUESTION                  │  │ Search... [search box]        │ │
+│  │                               │  │                               │ │
+│  │ Topic: [Python      ]         │  │ [🐍 Two Sum] [EASY] 45s      │ │
+│  │                               │  │ Return indices of two numbers │ │
+│  │ Difficulty: [Medium ▼]        │  │ [Edit] [Delete]              │ │
+│  │                               │  │                               │ │
+│  │ Timer: [60        ] seconds   │  │ [⚙️ Valid Parentheses] [H] │ │
+│  │                               │  │ Given a string of brackets... │ │
+│  │ ┌─ WRITE | PREVIEW ─────────┐ │  │ [Edit] [Delete]              │ │
+│  │ │ ## Question Title         │ │  │                               │ │
+│  │ │ Write markdown here...    │ │  │ ... more questions ...       │ │
+│  │ │                           │ │  │                               │ │
+│  │ └───────────────────────────┘ │  │                               │ │
+│  │                               │  │ 6 questions total            │ │
+│  │ Answer (Markdown)             │  │                               │ │
+│  │ ┌───────────────────────────┐ │  └───────────────────────────────┘ │
+│  │ │ ## Solution               │ │                                     │
+│  │ │ [code block]              │ │                                     │
+│  │ └───────────────────────────┘ │                                     │
+│  │                               │                                     │
+│  │ [Create] [Cancel]             │                                     │
+│  │                               │                                     │
+│  └───────────────────────────────┘                                     │
+│                                                                         │
+│ Markdown syntax: **bold**, *italic*, `code`, [links], etc.            │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+🔧 CREATING A QUESTION (Example)
+═══════════════════════════════════════════════════════════════════════════════
+
+TOPIC:       Python
+DIFFICULTY:  medium
+TIMER:       90 seconds
+
+QUESTION (Markdown):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ ## Reverse a List                                                       │
+│                                                                         │
+│ Write a function to reverse a Python list **in-place**.                │
+│                                                                         │
+│ **Example:**                                                            │
+│                                                                         │
+│ ```python                                                               │
+│ lst = [1, 2, 3, 4, 5]                                                 │
+│ reverse_list(lst)                                                      │
+│ print(lst)  # [5, 4, 3, 2, 1]                                         │
+│ ```                                                                     │
+│                                                                         │
+│ **Constraints:**                                                        │
+│ - O(1) extra space                                                     │
+│ - Don't create a new list                                             │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ANSWER (Markdown):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ ## Solution                                                             │
+│                                                                         │
+│ Use two pointers (left and right) and swap elements:                  │
+│                                                                         │
+│ ```python                                                               │
+│ def reverse_list(lst):                                                │
+│     left, right = 0, len(lst) - 1                                    │
+│     while left < right:                                               │
+│         lst[left], lst[right] = lst[right], lst[left]                │
+│         left += 1                                                      │
+│         right -= 1                                                     │
+│                                                                         │
+│ # Test                                                                 │
+│ lst = [1, 2, 3, 4, 5]                                                │
+│ reverse_list(lst)                                                     │
+│ print(lst)  # [5, 4, 3, 2, 1]                                        │
+│ ```                                                                     │
+│                                                                         │
+│ **Time Complexity:** O(n)                                             │
+│ **Space Complexity:** O(1)                                            │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Then click [Create] and it appears in the questions list!
+
+
+📚 MARKDOWN & SYNTAX HIGHLIGHTING SUPPORT
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Code blocks with syntax highlighting:
+  ```python    ← Supported: python, javascript, cpp, c, java, sql, etc.
+  def func():
+      return "syntax highlighted!"
+  ```
+
+✓ Tables (GFM):
+  | Column 1 | Column 2 |
+  |----------|----------|
+  | Data 1   | Data 2   |
+
+✓ Lists & nested lists
+  - Item 1
+    - Nested item
+  - Item 2
+
+✓ Formatting:
+  **bold** | *italic* | ~~strikethrough~~ | `inline code`
+
+✓ Links & images:
+  [Link text](https://example.com)
+  ![Alt text](image-url)
+
+✓ Blockquotes:
+  > This is a blockquote
+  > with multiple lines
+
+✓ Headings:
+  # H1
+  ## H2
+  ### H3
+
+
+🌐 API ENDPOINTS (For Advanced Use)
+═══════════════════════════════════════════════════════════════════════════════
+
+GET  /questions/random           → Random question
+GET  /questions/random?topic=Python&difficulty=hard
+GET  /questions                  → All questions
+POST /questions                  → Create question
+PUT  /questions/:id              → Update question
+DELETE /questions/:id            → Delete question
+GET  /topics                     → List all topics
+GET  /health                     → Health check
+
+Example using curl:
+  curl http://localhost:3001/questions/random
+  curl http://localhost:3001/topics
+  curl -X POST http://localhost:3001/questions \
+    -H "Content-Type: application/json" \
+    -d '{"topic":"JavaScript","question":"...","answer":"...","difficulty":"easy","timer_seconds":60}'
+
+
+✅ VERIFICATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+After starting, check:
+
+□ Backend terminal shows:
+  🚀 Quiz Platform API running at http://localhost:3001
+
+□ Visit http://localhost:3001/health in browser
+  Returns: {"status":"ok","timestamp":"..."}
+
+□ Frontend opens automatically at http://localhost:3000
+
+□ You see a random question with:
+  - Topic (Python, C++, SQL)
+  - Question text (markdown rendered)
+  - Timer counting down (top right)
+  - "Reveal Answer" button
+
+□ Click "Reveal Answer" and answer appears
+
+□ Click gear icon (⚙️) in bottom right
+
+□ Admin panel shows questions list
+
+□ Create a new question and it appears in quiz
+
+
+🎓 EXAMPLE QUESTIONS INCLUDED
+═══════════════════════════════════════════════════════════════════════════════
+
+The platform auto-seeds with 6 professional questions:
+
+📌 PYTHON
+  1. Two Sum (Easy, 45s)
+     - Array problem with hash map solution
+  
+  2. LRU Cache (Hard, 120s)
+     - Complex data structure design
+
+📌 C++
+  3. Valid Parentheses (Easy, 60s)
+     - Stack-based solution
+  
+  4. Reverse Linked List (Medium, 90s)
+     - Both iterative and recursive solutions
+
+📌 SQL
+  5. Second Highest Salary (Medium, 75s)
+     - Window functions and subqueries
+  
+  6. Top 3 Salaries per Department (Hard, 100s)
+     - Advanced grouping and ranking
+
+
+🚀 NEXT STEPS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. ✅ Start the platform (using any method above)
+
+2. ✅ Take a few quizzes to get familiar
+
+3. ✅ Click admin panel (⚙️) and create your own questions
+
+4. ✅ Share with friends or use for studying
+
+5. ⭐ Star on GitHub if you find it useful!
+
+
+💬 GETTING HELP
+═══════════════════════════════════════════════════════════════════════════════
+
+Still stuck? Try:
+
+1. Read the full README.md in quiz-platform folder
+2. Check browser console (F12 → Console tab)
+3. Check terminal output for error messages
+4. Verify Node.js is installed: node --version
+5. Delete node_modules and reinstall: npm install
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                   Ready to start? Run: ./start.sh (Mac/Linux)
+                                   or: start-windows.bat (Windows)
+═══════════════════════════════════════════════════════════════════════════════

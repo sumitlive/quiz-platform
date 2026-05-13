@@ -1,0 +1,449 @@
+[
+  {
+    "id": 175,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Combine Two Tables\n\nWrite a solution to report the **first name, last name, city, and state** of each person in the `Person` table. If the address of a `personId` is not present in the `Address` table, report `null` instead.",
+    "answer": "## Solution: Left Join\n\n```sql\nSELECT \n    p.firstName, \n    p.lastName, \n    a.city, \n    a.state \nFROM person AS p \nLEFT JOIN address AS a \n    ON p.personId = a.personId;\n```\n\n**Key insight:** A `LEFT JOIN` ensures all records from the `Person` table are kept, even if there is no matching record in `Address`.",
+    "hint": "hi",
+    "updated_at": "2026-05-08T10:36:07.590Z"
+  },
+  {
+    "id": 181,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Employees Earning More Than Their Managers\n\nWrite a solution to find the employees who earn more than their managers.",
+    "answer": "## Solution: Self Join\n\n```sql\nSELECT \n    e1.name AS Employee \nFROM employee AS e1 \nJOIN employee AS e2 \n    ON e1.managerId = e2.id \nWHERE e1.salary > e2.salary;\n```\n\n**Key insight:** By joining the table to itself, you can compare the `salary` of a row (employee) against the `salary` of the row referenced by its `managerId`.",
+    "hint": "hi",
+    "updated_at": "2026-05-08T10:36:17.675Z"
+  },
+  {
+    "id": 182,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Duplicate Emails\n\nWrite a solution to report all the duplicate emails. Note that it's guaranteed that the email field is not `NULL`.",
+    "answer": "## Corrected Solution\n\n```sql\nSELECT p.email \nFROM person AS p \nWHERE p.email != 'null' \nGROUP BY p.email \nHAVING COUNT(*) > 1;\n```\n\n**What was wrong with previous attempts?**\n1. **HAVING vs LIMIT:** `LIMIT` cannot be used inside `HAVING`. You must use `COUNT(*) > 1` to find duplicates.\n2. **Order of Operations:** The correct SQL order is: `SELECT` → `FROM` → `WHERE` → `GROUP BY` → `HAVING` → `ORDER BY`.\n3. **NULL Handling:** `'null'` is a string. `NULL` is a special value. Ensure you are checking for the correct type.",
+    "hint": "hi",
+    "updated_at": "2026-05-08T10:36:27.673Z"
+  },
+  {
+    "id": 183,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Customers Who Never Order\n\nWrite a solution to find all customers who never order anything.",
+    "answer": "## Solution: NOT IN\n\n```sql\nSELECT c.name AS Customers \nFROM Customers AS c \nWHERE c.name NOT IN (\n    SELECT c.name \n    FROM Orders AS o \n    LEFT JOIN Customers AS c \n        ON o.customerId = c.id\n);\n```\n\n**Key insight:** Use `=` or `!=` for comparing single values. Use `IN` or `NOT IN` when comparing a value against a list or subquery result.",
+    "hint": "Find customers whose names don't appear in the Orders table. Use a subquery with NOT IN."
+  },
+  {
+    "id": 196,
+    "topic": "SQL",
+    "difficulty": "medium",
+    "question": "## Delete Duplicate Emails\n\nWrite a solution to **delete** all duplicate emails, keeping only one unique email with the smallest `id`.",
+    "answer": "## Solution: Self Join Delete\n\n```sql\nDELETE p1 \nFROM person p1, person p2 \nWHERE p1.email = p2.email \n  AND p1.id > p2.id;\n```\n\n**Key insight:** By joining the table to itself on the email, we can identify rows with the same email and delete the one with the larger `id`.",
+    "hint": "Join the table to itself and delete rows with duplicate emails that have a higher id than another row with the same email."
+  },
+  {
+    "id": 197,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Rising Temperature\n\nWrite a solution to find all dates' `id` with higher temperatures compared to its previous dates (yesterday).",
+    "answer": "## Optimized Solution\n\n```sql\nSELECT w2.id \nFROM Weather w1 \nJOIN Weather w2 \n    ON DATEDIFF(w2.recordDate, w1.recordDate) = 1 \nWHERE w2.temperature > w1.temperature;\n```\n\n**Why optimize?** Using `CROSS JOIN` and manually adding `day+1` is unoptimized and may fail across month/year boundaries. `DATEDIFF` is the standard, reliable way to handle date arithmetic.",
+    "hint": "Use DATEDIFF to compare records from consecutive days. Join the table to itself where one date is exactly 1 day after the other."
+  },
+  {
+    "id": 511,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Game Play Analysis I\n\nWrite a solution to find the **first login date** for each player.",
+    "answer": "## Solution: Aggregate Function\n\n```sql\nSELECT \n    player_id, \n    MIN(event_date) AS first_login \nFROM Activity \nGROUP BY player_id;\n```\n\n**Key insight:** Grouping by `player_id` and selecting the `MIN` of the date column effectively finds the earliest (first) entry for each user.",
+    "hint": "Group by player_id and use the MIN aggregate function to find the earliest date."
+  },
+  {
+    "id": 577,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Employee Bonus\n\nWrite a solution to report the name and bonus amount of each employee who satisfies either:\n1. The employee has a bonus less than 1000.\n2. The employee did not get any bonus.",
+    "answer": "## Solution: Left Join + Null Check\n\n```sql\nSELECT \n    e.name, \n    b.bonus \nFROM Employee AS e \nLEFT JOIN bonus AS b \n    ON e.empId = b.empId \nWHERE b.bonus IS NULL \n   OR b.bonus < 1000;\n```\n\n**Key insight:** Employees without a bonus won't have a record in the `Bonus` table. Using `LEFT JOIN` makes their bonus `NULL`, which must be explicitly checked using `IS NULL`.",
+    "hint": "Use LEFT JOIN to include all employees, then filter for those with NULL bonus or bonus < 1000."
+  },
+  {
+    "id": 584,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Find Customer Referee\n\nFind the names of the customers that are either:\n1. Referred by any customer with an `id` != 2.\n2. Not referred by any customer.",
+    "answer": "## Solution: Subquery Filter\n\n```sql\nSELECT c.name \nFROM Customer AS c \nWHERE c.id NOT IN (\n    SELECT c.id \n    FROM Customer AS c \n    WHERE c.referee_id = 2\n);\n```\n\n**Note:** This handles the logic by excluding those specifically referred by ID 2. In many SQL dialects, `referee_id <> 2` would exclude `NULL` values, so checking for `IS NULL` or using `NOT IN` is necessary.",
+    "hint": "Exclude customers whose referee_id is 2. Everyone else (including those with no referee) should be included."
+  },
+  {
+    "id": 586,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Customer Placing Largest Number of Orders\n\nWrite a solution to find the `customer_number` for the customer who has placed the largest number of orders.",
+    "answer": "## Solution: Group By & Limit\n\n```sql\nSELECT customer_number \nFROM Orders \nGROUP BY customer_number \nORDER BY COUNT(customer_number) DESC \nLIMIT 1;\n```\n\n**Key insight:** Group by the customer to count their orders, sort by that count in descending order, and use `LIMIT 1` to grab the top result.",
+    "hint": "Count orders per customer using GROUP BY, sort by count in descending order, and take the first result."
+  },
+  {
+    "id": 595,
+    "topic": "SQL",
+    "difficulty": "easy",
+    "question": "## Big Countries\n\nA country is **big** if:\n- It has an area of at least three million ($3,000,000$ km²), or\n- It has a population of at least twenty-five million ($25,000,000$).\n\nWrite a solution to find the name, population, and area of the big countries.",
+    "answer": "## Solution: OR Condition\n\n```sql\nSELECT \n    name, \n    population, \n    area \nFROM World \nWHERE area >= 3000000 \n   OR population >= 25000000;\n```\n\n**Key insight:** This is a straightforward filtering problem using the `OR` logical operator.",
+    "hint": "Use a WHERE clause with OR to find countries that meet either criterion: large area OR large population."
+  },
+  {
+    "id": 1,
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "## What is a process and process table?",
+    "answer": "### What is a Process?\nA process is a **program in execution**. \n* **Program:** A static file stored on disk (e.g., Chrome.exe).\n* **Process:** The active instance of that program running in memory.\n\n### What is a Process Table?\nThe OS maintains a **Process Table** to manage all active processes. It tracks:\n* **Process ID (PID)** and Name.\n* **Resources:** CPU usage, memory allocation, and open files.\n* **State:** Whether the process is Running 🟢, Waiting ⏳, or Stopped 🔴.",
+    "hint": "Think about the difference between a program file on disk and the program running in RAM. The process table keeps track of all running instances."
+  },
+  {
+    "id": 2,
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "## What are the different states of a process?",
+    "answer": "### The 3 Primary States\n1. **Running 🟢:** The process is currently being executed by the CPU.\n2. **Ready 🟡:** The process has all required resources but is waiting for its turn to use the CPU.\n3. **Waiting (Blocked) 🔴:** The process is waiting for an external event, such as user input or a file being read from the disk.\n\n### Queues\n* **Ready Queue:** A line of processes waiting for CPU time.\n* **Waiting Queue:** Processes sidelined until a specific I/O event occurs.",
+    "hint": "A process is Running when the CPU executes it, Ready when it's waiting for CPU time, and Waiting when it's blocked by I/O."
+  },
+  {
+    "id": 3,
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "## What is a Thread?",
+    "answer": "A **thread** is a single sequence stream within a process, often called a **lightweight process**. \n\nThreads allow for **parallelism** within a single application. \n* **Example (Browser):** One thread handles the UI, while another thread downloads a file.\n* **Example (MS Word):** One thread processes text input while another handles background spell-checking.",
+    "hint": "hi",
+    "updated_at": "2026-05-08T10:36:40.603Z"
+  },
+  {
+    "id": 4,
+    "topic": "Operating Systems",
+    "difficulty": "medium",
+    "question": "## What are the differences between a process and a thread?",
+    "answer": "### Process vs. Thread\n\n| Aspect | Process | Thread |\n| :--- | :--- | :--- |\n| **Execution** | Independent program managed by the OS. | Smallest unit of CPU scheduling within a process. |\n| **Memory** | Has its own private address space. | Shares code, data, and heap with the parent process. |\n| **Communication** | Uses IPC (Inter-Process Communication) — slower. | Communicates via shared memory — faster. |\n| **Context Switching** | Heavy; requires saving/restoring full state. | Lightweight; only switches stack and registers. |",
+    "hint": "The key differences are: processes have isolated memory, threads share memory; creating processes is expensive, creating threads is cheap; context switching threads is faster."
+  },
+  {
+    "id": 5,
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "## What are the benefits of multithreaded programming?",
+    "answer": "Multithreading improves system performance in several ways:\n* **Responsiveness:** Allows a program to keep running even if part of it is blocked.\n* **Resource Sharing:** Multiple threads share the same memory space, making communication efficient.\n* **Economy:** It is cheaper and faster to create and context-switch threads than processes.\n* **Utilization:** Better utilization of multiprocessor architectures.",
+    "hint": "Think about how threads allow one part of a program to continue while another part waits for I/O. Consider the efficiency gains from shared memory and lower overhead."
+  },
+  {
+    "id": 6,
+    "topic": "Operating Systems",
+    "difficulty": "medium",
+    "question": "## What is Thrashing?",
+    "answer": "**Thrashing** occurs when a system spends more time processing **page faults** than actually executing instructions. \n\nThis happens when the OS keeps swapping pages in and out of virtual memory because there isn't enough physical RAM to hold the 'working set' of active processes. This leads to a massive collapse in system performance.",
+    "hint": "Thrashing is when the system spends more time managing memory (paging) than doing useful work. It happens when too many processes compete for limited RAM."
+  },
+  {
+    "id": 7,
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "## What is a Buffer?",
+    "answer": "A **buffer** is a temporary physical memory area used to store data while it is being moved from one place to another (e.g., between an application and a hardware device).\n\nIt helps compensate for the difference in speed between data producers and data consumers.",
+    "hint": "A buffer acts as a temporary holding area between two processes or devices that operate at different speeds, allowing them to work independently."
+  },
+  {
+    "id": 8,
+    "topic": "Operating Systems",
+    "difficulty": "medium",
+    "question": "## What is virtual memory?",
+    "answer": "Virtual memory is a technique that creates the **illusion** of a very large, contiguous memory space for the user, even if the physical RAM is small. \n\nIt works by using a portion of the **disk space** to extend the RAM. The OS subdivides virtual memory into small pieces (pages) and only loads them into physical memory when they are actively needed.",
+    "hint": "Virtual memory uses disk space to extend available RAM. Programs see a large address space, but only active pages are kept in physical memory."
+  },
+  {
+    "id": 9,
+    "topic": "Operating Systems",
+    "difficulty": "easy",
+    "question": "## Explain the main purpose of an operating system?",
+    "answer": "The OS acts as an **intermediary** between the computer user and the hardware. \n\n**Primary Goals:**\n1. Provide an environment where users can execute programs **conveniently and efficiently**.\n2. **Manage hardware resources** (CPU, memory, storage) fairly and securely.\n3. Prevent user programs from interfering with the system's operation.",
+    "hint": "The OS is a manager and mediator. It allocates resources fairly and prevents programs from crashing the system or interfering with each other."
+  },
+  {
+    "id": 10,
+    "topic": "Operating Systems",
+    "difficulty": "medium",
+    "question": "## What is demand paging and how does it work?",
+    "answer": "**Demand Paging** is the process of loading pages into memory only when they are specifically required (on demand).\n\n### How it Works:\n1. **Request:** A process tries to access a page.\n2. **Page Table Check:** The OS checks if the page is already in RAM.\n3. **Page Fault:** If the page is not in RAM, a 'Page Fault' occurs.\n4. **Loading:** The OS finds the page on the disk and brings it into an empty frame in RAM.\n5. **Update:** The Page Table is updated to show the page is now in memory.\n6. **Resume:** The process resumes execution as if the fault never happened.",
+    "hint": "Demand paging loads pages only when needed (on demand). When a page isn't in memory, a page fault occurs and the OS loads it from disk."
+  },
+  {
+    "id": 1,
+    "topic": "Deadlock",
+    "difficulty": "easy",
+    "question": "### 1. Explain deadlock using a simple but intuitive example\n\n> Hint :- explain about dinner problem,",
+    "answer": "Imagine **4 friends** sitting around a table.\n\nEach friend needs:\n\n- **2 chopsticks** to eat noodles\n- but each person can pick only **one chopstick at a time**\n\nThis is the classic **Dining Philosophers Problem** in Operating Systems.\n\n---\n\n# 🍜 Situation\n\nThere are 4 chopsticks:\n\n- C1, C2, C3, C4\n\nAnd 4 people:\n\n- P1, P2, P3, P4\n\nEach person needs:\n\n- left chopstick\n- right chopstick\n\nto start eating.\n\n---\n\n# 😵 What Happens?\n\nSuppose:\n\n- P1 picks C1\n- P2 picks C2\n- P3 picks C3\n- P4 picks C4\n\nNow everyone is holding ONE chopstick.\n\nBut:\n\n- P1 needs C2\n- P2 needs C3\n- P3 needs C4\n- P4 needs C1\n\nNobody releases their current chopstick because:\n\n> “I already got one, waiting for the second.”\n\nBut nobody can get the second one.\n\nSo:\n\n- everyone waits forever\n- nobody progresses\n- system freezes\n\nThis is a **deadlock**.\n\n⇒ Multiple processes are waiting for resources held by each other, creating a circular waiting chain where nobody can proceed.\n\n⇒ In DL, processes never finish executing, and the system resources are tied up, preventing other jobs from starting.\n\ne.g.- \n\n- Process A holds the **printer** and waits for the **scanner**\n- Process B holds the **scanner** and waits for the **printer**"
+  },
+  {
+    "id": 2,
+    "topic": "Deadlock",
+    "difficulty": "easy",
+    "question": "### 2. Why deadlock is dangerous\n\n> HINT :- cpu run → process block, server hangs, transaction issues",
+    "answer": "Because:\n\n- CPU may still run\n- but useful work stops\n- processes remain blocked forever\n\nCan cause:\n\n- server hangs\n- database freeze\n- banking transaction issues"
+  },
+  {
+    "id": 3,
+    "topic": "Deadlock",
+    "difficulty": "medium",
+    "question": "### 3. Necessary condition for deadlock\n\n> HINT :- MHNC",
+    "answer": "1. Mutual Exclusion : A resource cannot be shared. one chopstick can be used by only one person\n2. Hold and Wait :- Process holds one resource while waiting for another. holding one chopstick and waiting for other chopstick\n3. No Preemption :- Resource cannot be forcefully taken away. no one can fight for chopstick\n4. Circular Wait :- A circular chain exists."
+  },
+  {
+    "id": 4,
+    "topic": "Deadlock",
+    "difficulty": "medium",
+    "question": "### 4. four ways of handling deadlock\n\n> HINT :- D-PADR",
+    "answer": "1. Deadlock Prevention :- one of the necessary condition do not hold. \n2. Deadlock Avoidance :- Bankers algorithm\n3. Deadlock Detection :- \n4. Deadlock Recovery :-"
+  },
+  {
+    "id": 5,
+    "topic": "Deadlock",
+    "difficulty": "easy",
+    "question": "### 5. how to ensure “mutual exclusion” do not hold",
+    "answer": "- Use locks (mutual exclusion) only for non-sharable resource.\n- Sharable resources like Read-Only files can be accessed by multiple processes"
+  },
+  {
+    "id": 6,
+    "topic": "Deadlock",
+    "difficulty": "medium",
+    "question": "### 6. how to ensure “hold and wait” do not hold",
+    "answer": "we should make sure that a process:\n\n> should not hold resources while waiting for new ones.\n\n**Protocol A** :-  Before execution begins\n\n- the process must request **all resources together**\n\nIf all are available:\n\n- OS gives all resources\n- process starts execution\n\n**Protocol B** :- A process can request new resources only if:\n\n- it currently holds no resources.\n\nIf it needs additional resources - release all currently held resources"
+  },
+  {
+    "id": 7,
+    "topic": "Deadlock",
+    "difficulty": "medium",
+    "question": "### 7. how to ensure “no preemption” do not hold",
+    "answer": "If a process requests an unavailable resource while holding others, its current resources are taken away and it waits until all needed resources become available together. This prevents processes from holding resources indefinitely while waiting for others."
+  },
+  {
+    "id": 8,
+    "topic": "Deadlock",
+    "difficulty": "hard",
+    "question": "### 8. how to ensure “circular wait” do not hold",
+    "answer": "**enforce a fixed order for requesting resources. This is called Resource Ordering**\n\nSuppose there are two resources: R1, R2\n\nAnd two processes: P1, P2\n\n**Both need: R1 and R2**\n\nWe define a global rule:\n\n> Every process must lock resources in the same order.\n\nFor example:\n\n1. first lock R1\n2. then lock R2\n\nSo both P1 and P2 follow:\n\n```\nLock R1 → Lock R2\n```\n\n---\n\n#### What Happens Now?\n\nSuppose:\n\n- P1 locks R1 first\n\nThen:\n\n- P2 cannot lock R1\n- so P2 waits immediately\n\nNow:\n\n- P1 safely gets R2 also\n- completes execution\n- releases resources\n\nThen:\n\n- P2 gets its turn\n\nNo circular chain forms."
+  },
+  {
+    "id": 9,
+    "topic": "Deadlock",
+    "difficulty": "hard",
+    "question": "### 9. what is Deadlock Avoidance",
+    "answer": "Before allocating resources:\n\nOS checks:\n\n- available resources\n- allocated resources\n- maximum future needs\n\nThen asks:\n\n> “After giving this resource, can all processes still finish safely?”\n\nIf YES: approve request\n\nIf NO: delay request\n\nA system is in **safe state** if:\n\n> there exists some order in which all processes can complete successfully.\n\nThis order is called: Safe Sequence\n\nA safe state completely guarantees that a deadlock is impossible.\n\nUnsafe means:\n\n> OS cannot guarantee that all processes will finish safely.\n\nImportant:\n\n# Unsafe ≠ Deadlock immediately\n\nIt only means:\n\n- deadlock CAN happen later.\n\n[more about unsafe state](https://www.notion.so/more-about-unsafe-state-35af5266cd118095a630fdd56b906cc3?pvs=21)"
+  },
+  {
+    "id": 10,
+    "topic": "Deadlock",
+    "difficulty": "hard",
+    "question": "### 10. What is Banker’s algorithm",
+    "answer": "The idea is:\n\n> Whenever a process requests resources:\n> \n> OS checks:\n> \n> 1. If resources are available\n> 2. Pretends to allocate them temporarily\n> 3. Checks whether system remains safe\n> 4. If safe → allocate permanently\n> 5. If unsafe → rollback and make process wait\n\n---\n\n# 🏦 Why the Name “Banker”?\n\nThink of a bank giving loans.\n\nA bank does NOT give money blindly.\n\nBefore approving a loan, bank checks:\n\n> “Even after giving this loan, will I still have enough money so all customers can eventually be satisfied?”\n\nIf yes: approve loan\n\nIf no: reject/wait"
+  },
+  {
+    "id": 50,
+    "topic": "Binary Search",
+    "difficulty": "medium",
+    "question": "## 50. Pow(x, n)",
+    "answer": "```cpp\n#include <iostream>\nusing namespace std;\n\nint func(int mid, int n, int m) {\n    long long ans = 1;\n    for (int i = 1; i <= n; i++) {\n        ans *= mid;\n        if (ans > m) {\n            return 2;\n        }\n    }\n    if (ans == m) {\n        return 1;\n    }\n    return 0;\n}\n\nint NthRoot(int n, int m) {\n    int low = 1, high = m;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int midN = func(mid, n, m);\n        if (midN == 1) {\n            return mid;\n        } else if (midN == 0) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return -1;\n}\n```"
+  },
+  {
+    "id": 875,
+    "topic": "Binary Search",
+    "difficulty": "medium",
+    "question": "## 875. Koko Eating Bananas (***)",
+    "answer": "```cpp\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\nprivate:\n    bool isValid(vector<int>& piles, int mid, int h) {\n        int hour = 0;\n        for (int pile : piles) {\n            // Calculate hours needed for each pile, rounding up\n            hour += (pile + mid - 1) / mid;\n            // sum += (pile - 1) / mid + 1; // works same\n        }\n        return hour <= h;\n    }\n    \npublic:\n    int minEatingSpeed(vector<int>& piles, int h) {\n        int lo = 1, hi = *max_element(piles.begin(), piles.end());\n        \n        while (lo < hi) {\n            int mid = (lo + hi) / 2;\n            if (isValid(piles, mid, h)) {\n                hi = mid;\n            } else {\n                lo = mid + 1;\n            }\n        }\n        return hi;\n    }\n};\n```"
+  },
+  {
+    "id": 81,
+    "topic": "Binary Search",
+    "difficulty": "medium",
+    "question": "## 81. Search in Rotated Sorted Array II\n\nThere is an integer array `nums` sorted in non-decreasing order (not necessarily with **distinct** values).\n\nBefore being passed to your function, `nums` is **rotated** at an unknown pivot index `k` (`0 <= k < nums.length`) such that the resulting array is `[nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]` (**0-indexed**). For example, `[0,1,2,4,4,4,5,6,6,7]` might be rotated at pivot index `5` and become `[4,5,6,6,7,0,1,2,4,4]`.\n\nGiven the array `nums` **after** the rotation and an integer `target`, return `true` *if* `target` *is in* `nums`, *or* `false` *if it is not in* `nums`.\n\nYou must decrease the overall operation steps as much as possible.\n\n**Example 1:**\n```text\nInput: nums = [2,5,6,0,0,1,2], target = 0\nOutput: true\n```\n\n**Example 2:**\n```text\nInput: nums = [2,5,6,0,0,1,2], target = 3\nOutput: false\n```",    "answer": "```cpp\n#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool search(vector<int>& nums, int target) {\n        int low = 0, high = nums.size() - 1;\n        \n        while (low <= high) {\n            int mid = (low + high) / 2;\n            \n            if (nums[mid] == target) {\n                return true;\n            }\n            \n            if (nums[low] == nums[mid]) {\n                low++;\n                continue;\n            }\n            \n            if (nums[low] <= nums[mid]) {\n                if (nums[low] <= target && target <= nums[mid]) {\n                    high = mid - 1;\n                } else {\n                    low = mid + 1;\n                }\n            } else {\n                if (nums[mid] <= target && target <= nums[high]) {\n                    low = mid + 1;\n                } else {\n                    high = mid - 1;\n                }\n            }\n        }\n        \n        return false;\n    }\n};\n```",
+    "hint": "",
+    "updated_at": "2026-05-09T13:10:03.218Z"
+  },
+  {
+    "id": 153,
+    "topic": "Binary Search",
+    "difficulty": "medium",
+    "question": "## 153. Find Minimum in Rotated Sorted Array",
+    "answer": "```cpp\n#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    int findMin(vector<int>& nums) {\n        int left = 0, right = nums.size() - 1;\n        \n        while (left < right) {\n            int mid = (left + right) / 2;\n            if (nums[mid] > nums[right]) {\n                left = mid + 1;\n            } else {\n                right = mid;\n            }\n        }\n        \n        return nums[left];\n    }\n};\n```"
+  },
+  {
+    "id": 410,
+    "topic": "Binary Search",
+    "difficulty": "hard",
+    "question": "## 410. Split Array Largest Sum (***)(W)",
+    "answer": "```cpp\nclass Solution {\npublic:\n    bool check(vector<int>& nums, int m, int curr){\n        int i=-1, n = nums.size(), count=1;\n        \n        int sum=0;\n        \n        while(++i<n && count<=m){\n        //if adding the nums[i] does not make the sum greater than curr (mid), we add it to group\n            if(sum+nums[i] <= curr) sum += nums[i];  \n        // else we can add a new group to store the remaining element.\n            else sum=nums[i], count++;\n        }\n        \n        //If the total number of groups is less than the m, we can split the any of the current group of size >=2.\n        //this will not increase the maximum sum and hence our answer will still be valid\n        \n        return count<=m;\n    }\n    \n    int splitArray(vector<int>& nums, int m) {\n        int e=0,s=0,mid,ans;\n        for(auto x : nums){\n            e += x;               //e stores the sum of the nums, upper range of Binary Search\n            s=max(s,x);          //s stores the largest element in array nums, lower range of Binary Search\n        }   \n        ans = e; \n        \n        while(s<=e){\n            mid = s + (e-s)/2;\n            \n            if(check(nums,m,mid)){\n                ans = min(ans,mid);\n                e = mid - 1;\n            }\n            else s = mid + 1;\n        }\n        return ans;\n    }\n};\n```"
+  },
+  {
+    "id": "AGGRCOW",
+    "topic": "Binary Search",
+    "difficulty": "hard",
+    "question": "## AGGRCOW - Aggressive cows (SPOJ)",
+    "answer": "```cpp\n#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nbool can_place(int c, vector<int>& positions, int distance) {\n    /*\n    Returns true if we can place 'c' cows in 'positions' (sorted)\n    such that the minimum gap between any two cows is at least 'distance'.\n    */\n    int count = 1;\n    int last_pos = positions[0];\n    for (int i = 1; i < positions.size(); i++) {\n        if (positions[i] - last_pos >= distance) {\n            count++;\n            last_pos = positions[i];\n            if (count >= c) {\n                return true;\n            }\n        }\n    }\n    return false;\n}\n\nint max_min_distance(vector<int>& positions, int c) {\n    /*\n    Binary-search the largest minimum distance to place 'c' cows\n    in the sorted list 'positions'.\n    */\n    int left = 0, right = positions[positions.size() - 1] - positions[0];\n    int answer = 0;\n    while (left <= right) {\n        int mid = (left + right) / 2;\n        if (can_place(c, positions, mid)) {\n            answer = mid;\n            left = mid + 1;\n        } else {\n            right = mid - 1;\n        }\n    }\n    return answer;\n}\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        int n, c;\n        cin >> n >> c;\n        vector<int> positions(n);\n        for (int i = 0; i < n; i++) {\n            cin >> positions[i];\n        }\n        sort(positions.begin(), positions.end());\n        int ans = max_min_distance(positions, c);\n        cout << ans << \"\n\";\n    }\n    return 0;\n}\n```\n\n```python\n#include <bits/stdc++.h>\nusing namespace std ;\n\nint T, n, c, maxm, ans, mid, cows, temp ;\nvector<int> x ;\n\nbool check(int k)\n  {\n    cows=1 ;\n    temp=x[0] ;\n    for(int i=1 ; i<n ; i++)\n      {\n        if(x[i]-temp>=k)\n          {\n            cows++ ;\n            temp=x[i] ;\n          }\n      }\n    if(cows>=c) return true ;\n    return false ;\n  }\n\nvoid bs(int l, int u)\n  {\n    ans=-1 ;\n    while(l<=u)\n      {\n        mid=(l+u)/2 ;\n        if(check(mid))\n          {\n            if(mid>ans)\n              ans=mid ;\n            l=mid+1 ;\n          }\n        else\n            u=mid-1 ;\n      }\n  }\n\nint main()\n  {\n    cin>> T ;\n    while(T--)\n      {\n        cin>> n >> c ;\n        x.clear() ;\n        x.resize(n) ;\n        for(int i=0 ; i<n ; i++)\n          cin>> x[i] ;\n        sort(x.begin(), x.end()) ;\n        bs(0, x[n-1]) ;\n        cout<< ans << endl ;\n      }\n  }\n```"
+  },
+  {
+    "id": 1,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### Q1. What is RAG?\n\n> HINT :- retreives external Info, relying on pretrained knowledge",
+    "answer": "### Expected Answer\n\nRAG (Retrieval-Augmented Generation) is a technique where an LLM retrieves relevant external information before generating an answer.\n\nIt helps AI answer questions using:\n\n- PDFs, Databases, Websites, Custom company documents\n\ninstead of relying only on pretrained knowledge."
+  },
+  {
+    "id": 2,
+    "topic": "RAG",
+    "difficulty": "medium",
+    "question": "### Q2. Why do we need RAG? / What happens if retrieval fails?\n\n> HINT :- private data, hallucinate, recent info,",
+    "answer": "### Expected Points\n\nNormal LLMs:\n\n- don’t know private/company data\n- may hallucinate\n- may not know recent information\n\nRAG solves this by retrieving relevant information first."
+  },
+  {
+    "id": 3,
+    "topic": "RAG",
+    "difficulty": "medium",
+    "question": "### Q3. What are the main components of a RAG pipeline?\n\n> HINT :- DTVR, LE",
+    "answer": "### Expected Answer\n\nTypical RAG pipeline:\n\n1. Document Loader\n2. Text Splitter\n3. Vector Database\n4. Retriever\n5. LLM\n6. Embedding Model"
+  },
+  {
+    "id": 4,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### Q4. What is a Document Loader in LangChain?",
+    "answer": "### Strong Answer\n\nA Document Loader is responsible for **loading** data from different sources like PDFs, text files, websites, or CSVs and **converting** them into a common format i.e. LangChain Document objects.\n\ne.g.- Text Loader, PDF Loader, Web Loader, CSV Loader\n\nThese documents contain:\n\n- page_content\n- metadata"
+  },
+  {
+    "id": 5,
+    "topic": "RAG",
+    "difficulty": "medium",
+    "question": "### 4.1 What the Importance of Document Loader ?",
+    "answer": "LangChain uses Document objects so that:\n\n- search become easier\n- all data sources look similar\n- PDFs, websites, CSVs, text files can be handled uniformly"
+  },
+  {
+    "id": 6,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### Q5. Why is metadata important?",
+    "answer": "### Strong Interview Answer\n\nMetadata helps track where information came from.\n\nExamples:- PDF page number - source URL - file path - author\n\nThis improves: traceability, citations, filtering, debugging"
+  },
+  {
+    "id": 7,
+    "topic": "RAG",
+    "difficulty": "medium",
+    "question": "### Q6. Why can't we directly give huge PDFs to an LLM?",
+    "answer": "Because:\n\n- LLMs have context window limits\n- processing becomes inefficient\n\nRAG retrieves only relevant chunks instead."
+  },
+  {
+    "id": 8,
+    "topic": "RAG",
+    "difficulty": "hard",
+    "question": "### Q7. How would you improve retrieval quality?",
+    "answer": "### Strong Answer\n\nPossible improvements:\n\n- better chunking strategy\n- hybrid search\n- reranking\n- metadata filtering\n- better embedding models\n- query expansion"
+  },
+  {
+    "id": 9,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### 8. What is LLM Hallucination?",
+    "answer": "LLM hallucination happens when an AI model generates:\n\n- false information,\n- made-up facts,\n- incorrect answers,\n- or fake references\n\ndue to the probabilistic nature of language models.\n\nSimple Example\n\nUser:\n\n> “Who won the FIFA World Cup in 2028?”\n> \n\nLLM:\n\n> “Brazil won the 2028 FIFA World Cup.”\n> \n\nThis is hallucination because:\n\n- the event hasn’t happened yet\n- the answer is fabricated"
+  },
+  {
+    "id": 10,
+    "topic": "RAG",
+    "difficulty": "hard",
+    "question": "### 9. Why Hallucination Happens",
+    "answer": "1. Probabilistic Prediction\n\nLLMs predict:\n\n> “What word is likely next?”\n> \n\nThey do NOT:\n\n- verify truth\n- reason like humans\n- access real-time reality by default\n\n2. Lack of Knowledge\n\nIf the model:\n\n- never learned something\n\n3. Ambiguous Questions\n\nUnclear prompts increase hallucination risk.\n\nExample:\n\n> “Tell me about Jaguar.”\n> \n\nCould mean:\n\n- animal\n- car company\n- operating system\n\n4. Retrieval Failure in RAG\n\nIf retriever fails to fetch correct documents:\n\n- LLM fills gaps itself\n- may invent answers"
+  },
+  {
+    "id": 11,
+    "topic": "RAG",
+    "difficulty": "medium",
+    "question": "### 10. How to Reduce Hallucinations",
+    "answer": "1. RAG (Most Important) - Retrieve external verified information.\n\n2. Better Prompting - Clear instructions reduce ambiguity.\n\n3. Fine-tuning - Domain-specific tuning can help.\n\n4. Verification Systems - Use fact-checking pipelines.\n\n5. Lower Temperature - Reduces randomness."
+  },
+  {
+    "id": 12,
+    "topic": "RAG",
+    "difficulty": "medium",
+    "question": "### 11. Hallucination in RAG Systems",
+    "answer": "Even RAG systems can hallucinate if:\n\n- retrieval is poor\n- chunks are irrelevant\n- context is incomplete\n\nSo:\n\n> retrieval quality is critical."
+  },
+  {
+    "id": 13,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### 12. Where hallucination is real Industry Concern",
+    "answer": "Hallucination is dangerous in:\n\n- healthcare\n- finance\n- law\n- autonomous systems\n\nbecause incorrect outputs may cause serious consequences."
+  },
+  {
+    "id": 14,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### 13. Does ChatGPT hallucinate?",
+    "answer": "Yes. All LLMs can hallucinate."
+  },
+  {
+    "id": 15,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### 14. Is hallucination the same as lying?",
+    "answer": "No.\n\nLLMs do not intentionally deceive.\n\nThey generate statistically likely text."
+  },
+  {
+    "id": 16,
+    "topic": "RAG",
+    "difficulty": "easy",
+    "question": "### 15. Can hallucination be fully removed?",
+    "answer": "No, but it can be significantly reduced."
+  },
+  {
+    "id": "GFG",
+    "topic": "String",
+    "difficulty": "hard",
+    "question": "## (***)(GFG) Substrings with K Distinct",
+    "answer": "```cpp\n// Backend complete function template for C++\n\nclass Solution {\n  public:\n    int atMostK(string& s, int k) {\n        if (k < 0)\n            return 0;\n\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int m[26] = {0};\n\n        while (j < s.length()) {\n            m[s[j] - 'a']++;\n            if (m[s[j] - 'a'] == 1)\n                cnt++;\n\n            while (cnt > k) {\n                m[s[i] - 'a']--;\n                if (m[s[i] - 'a'] == 0)\n                    cnt--;\n                i++;\n            }\n\n            res += (j - i + 1);\n            j++;\n        }\n        return res;\n    }\n\n    int countSubstr(string str, int k) { return atMostK(str, k) - atMostK(str, k - 1); }\n};\n```"
+  },
+  {
+    "id": 8,
+    "topic": "String",
+    "difficulty": "hard",
+    "question": "## (***)8. String to Integer (atoi)",
+    "answer": "```cpp\nclass Solution {\npublic:\n    int myAtoi(string s) {\n        if (s.empty()) {\n            return 0;\n        }\n        \n        // Use standard library constants\n        const long long MAX_INT = INT_MAX;\n        const long long MIN_INT = INT_MIN;\n        \n        int i = 0;\n        int n = s.length();\n        \n        // Step 1: Skip leading whitespace\n        while (i < n && s[i] == ' ') {\n            i++;\n        }\n        \n        // Check if we've reached the end\n        if (i == n) {\n            return 0;\n        }\n        \n        // Step 2: Check for sign\n        int sign = 1;\n        if (s[i] == '+') {\n            i++;\n        } else if (s[i] == '-') {\n            sign = -1;\n            i++;\n        }\n        \n        // Step 3: Read digits and convert\n        long long res = 0;\n        while (i < n && isdigit(s[i])) {\n            int digit = s[i] - '0';\n            res = res * 10 + digit;\n            \n            if (sign * res <= INT_MIN) {\n                return INT_MIN;\n            }\n            if (sign * res >= INT_MAX) {\n                return INT_MAX;\n            }\n            \n            i++;\n        }\n        \n        // Step 4: Apply sign and return\n        return static_cast<int>(res * sign);     \n    }\n};\n```"
+  },
+  {
+    "id": 14,
+    "topic": "String",
+    "difficulty": "easy",
+    "question": "## 14. Longest Common Prefix",
+    "answer": "```cpp\nclass Solution {\npublic:\n    string longestCommonPrefix(vector<string>& v) {\n        string ans=\"\";\n        sort(v.begin(),v.end());\n        int n=v.size();\n        string first=v[0],last=v[n-1];\n        for(int i=0;i<min(first.size(),last.size());i++){\n            if(first[i]!=last[i]){\n                return ans;\n            }\n            ans+=first[i];\n        }\n        return ans;\n    }\n};\n ```"  
+  },
+  {
+    "id": 205,
+    "topic": "String",
+    "difficulty": "easy",
+    "question": "## 205. Isomorphic Strings",
+    "answer": "```cpp\nclass Solution {\npublic:\n    bool isIsomorphic(string s, string t) {\n        unordered_map<char, int> charIndexS;\n        unordered_map<char, int> charIndexT;\n\n        for (int i = 0; i < s.length(); i++) {\n            if (charIndexS.find(s[i]) == charIndexS.end()) {\n                charIndexS[s[i]] = i;\n            }\n\n            if (charIndexT.find(t[i]) == charIndexT.end()) {\n                charIndexT[t[i]] = i;\n            }\n\n            if (charIndexS[s[i]] != charIndexT[t[i]]) {\n                return false;\n            }\n        }\n\n        return true;        \n    }\n};\n```"
+  },
+  {
+    "id": 242,
+    "topic": "String",
+    "difficulty": "easy",
+    "question": "## 242. Valid Anagram",
+    "answer": "```cpp\nclass Solution {\npublic:\n    bool isAnagram(string s, string t) {\n        if (s.length() != t.length()) return false;\n\n        int arr[26] = {0};\n\n        for (int i = 0 ; i<s.length(); i++){\n            arr[s[i]-'a'] += 1;\n            arr[t[i] - 'a'] -= 1;\n        }\n\n        for (int check : arr){\n            if (check != 0) return false;\n        }\n        return true;\n    }\n};\n```\n\n```cpp\nclass Solution {\npublic:\n    bool isAnagram(string s, string t) {\n        sort(s.begin(), s.end());\n        sort(t.begin(), t.end());\n        return s==t;\n    }\n};\n```"
+  },
+  {
+    "id": 796,
+    "topic": "String",
+    "difficulty": "easy",
+    "question": "## 796. Rotate String",
+    "answer": "```cpp\nclass Solution {\npublic:\n    bool rotateString(string& s, string& goal) {\n        return s.size()==goal.size() && (s+s).find(goal)!=-1;\n    }\n};\n```"
+  },
+  {
+    "id": 1903,
+    "topic": "String",
+    "difficulty": "easy",
+    "question": "## 1903. Largest Odd Number in String",
+    "answer": "```cpp\nclass Solution {\npublic:\n    string largestOddNumber(string num) {\n        for (int i = num.length() - 1; i >= 0; i--) {\n            if ((num[i] - '0') % 2 == 1) {\n                return num.substr(0, i + 1);\n            }\n        }\n        return \"\";        \n    }\n};\n```"
+  }
+
+]

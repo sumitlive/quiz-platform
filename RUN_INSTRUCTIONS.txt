@@ -1,0 +1,372 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          HOW TO RUN THE APP                                 ║
+║                                                                              ║
+║                        STEP-BY-STEP INSTRUCTIONS                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+🎯 QUICKEST WAY (AUTOMATED)
+═══════════════════════════════════════════════════════════════════════════════
+
+WINDOWS 10/11:
+──────────────
+1. Open Command Prompt or PowerShell
+2. Navigate to the quiz-platform folder
+3. Type: start-windows.bat
+4. Two new windows open - both servers start automatically
+5. Browser opens to http://localhost:3000
+6. Done! Start taking quizzes 🎉
+
+MAC:
+────
+1. Open Terminal
+2. Navigate to the quiz-platform folder
+3. Type: chmod +x start.sh
+4. Type: ./start.sh
+5. Wait for "Both servers are running" message
+6. Browser opens to http://localhost:3000
+7. Done! 🎉
+
+LINUX:
+──────
+1. Open Terminal
+2. Navigate to the quiz-platform folder
+3. Type: chmod +x start.sh
+4. Type: ./start.sh
+5. Wait for "Both servers are running" message
+6. Go to http://localhost:3000 in browser
+7. Done! 🎉
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        IF AUTOMATED SCRIPTS DON'T WORK
+═══════════════════════════════════════════════════════════════════════════════
+
+
+🔧 MANUAL METHOD (Two Terminal Windows)
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: INSTALL BACKEND DEPENDENCIES (First time only)
+────────────────────────────────────────────────────────
+
+Open terminal/command prompt and type:
+
+    cd quiz-platform/server
+    npm install
+
+Wait for it to complete (1-2 minutes)
+
+
+STEP 2: INSTALL FRONTEND DEPENDENCIES (First time only)
+─────────────────────────────────────────────────────────
+
+Open NEW terminal/command prompt and type:
+
+    cd quiz-platform/client
+    npm install
+
+Wait for it to complete (2-3 minutes)
+
+
+STEP 3: START THE BACKEND SERVER
+─────────────────────────────────
+
+In the FIRST terminal:
+
+    cd quiz-platform/server
+    npm start
+
+EXPECTED OUTPUT:
+    🚀 Quiz Platform API running at http://localhost:3001
+
+KEEP THIS RUNNING! Don't close this window.
+
+
+STEP 4: START THE FRONTEND SERVER
+──────────────────────────────────
+
+In the SECOND terminal:
+
+    cd quiz-platform/client
+    npm start
+
+EXPECTED OUTPUT:
+    Compiled successfully!
+    On Your Network: http://localhost:3000
+
+Your browser should open automatically.
+If not, visit: http://localhost:3000
+
+🎉 YOU'RE DONE! The app is running!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                             STOPPING THE SERVERS
+═══════════════════════════════════════════════════════════════════════════════
+
+To stop the servers:
+
+1. In each terminal window, press: CTRL + C
+
+That's it! Both servers will stop.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                             WHAT TO EXPECT
+═══════════════════════════════════════════════════════════════════════════════
+
+When everything starts correctly:
+
+✓ Backend terminal (port 3001):
+  Shows: "🚀 Quiz Platform API running at http://localhost:3001"
+
+✓ Frontend terminal (port 3000):
+  Shows: "Compiled successfully!"
+         "On Your Network: http://localhost:3000"
+
+✓ Browser window:
+  Opens automatically to http://localhost:3000
+  Shows: A random coding question with a timer
+
+✓ You can:
+  - Read the question (with syntax highlighting)
+  - See a countdown timer
+  - Click "Reveal Answer"
+  - Filter by topic/difficulty
+  - Click gear icon (⚙️) to go to admin panel
+  - Create new questions in admin panel
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                            VERIFICATION STEPS
+═══════════════════════════════════════════════════════════════════════════════
+
+If something doesn't work, verify these:
+
+1. Is Node.js installed?
+   Type: node --version
+   Should show: v14.0.0 or higher
+
+2. Is backend running?
+   Open browser and go to: http://localhost:3001/health
+   Should see: {"status":"ok",...}
+
+3. Is frontend running?
+   Open browser and go to: http://localhost:3000
+   Should see: Quiz page with a question
+
+4. Check for errors in terminal windows
+   Read any red error messages carefully
+
+5. Make sure both terminals show "running" status
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                          COMMON ISSUES & SOLUTIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+ISSUE: "Port 3000 already in use"
+────────────────────────────────
+
+SOLUTION 1: Change the port
+  In frontend terminal, press CTRL+C to stop
+  Type: PORT=3002 npm start
+  Go to: http://localhost:3002
+
+SOLUTION 2: Find what's using port 3000
+  Windows: netstat -ano | findstr :3000
+           Then: taskkill /PID <number> /F
+  
+  Mac/Linux: lsof -i :3000
+             Then: kill -9 <number>
+
+
+ISSUE: "Port 3001 already in use"
+───────────────────────────────
+
+SOLUTION 1: Change the port
+  In backend terminal, press CTRL+C to stop
+  Type: PORT=3002 npm start
+  Backend now on: http://localhost:3002
+
+SOLUTION 2: Find what's using port 3001
+  Windows: netstat -ano | findstr :3001
+           Then: taskkill /PID <number> /F
+  
+  Mac/Linux: lsof -i :3001
+             Then: kill -9 <number>
+
+
+ISSUE: "npm: command not found"
+─────────────────────────────
+
+Node.js is not installed or not in your PATH
+
+SOLUTION:
+  1. Download Node.js: https://nodejs.org/
+  2. Choose LTS (Long Term Support) version
+  3. Run the installer
+  4. Make sure "Add to PATH" is checked
+  5. Restart your terminal/command prompt
+  6. Type: node --version (should work now)
+
+
+ISSUE: "npm install" takes forever or fails
+────────────────────────────────────────────
+
+SOLUTION:
+  1. Clear npm cache: npm cache clean --force
+  2. Delete node_modules folder if it exists
+  3. Delete package-lock.json if it exists
+  4. Try again: npm install
+  5. Check your internet connection
+
+
+ISSUE: Can't find module errors
+───────────────────────────────
+
+SOLUTION:
+  1. Delete the node_modules folder
+  2. Run: npm install
+  3. Try again
+
+
+ISSUE: Frontend shows blank page or errors
+───────────────────────────────────────────
+
+SOLUTION:
+  1. Check browser console (F12 → Console tab)
+  2. Look for red error messages
+  3. Make sure backend is running (check http://localhost:3001/health)
+  4. Try clearing browser cache: CTRL+SHIFT+Delete
+  5. Reload page: CTRL+R or F5
+
+
+ISSUE: Frontend can't connect to backend
+─────────────────────────────────────────
+
+SOLUTION:
+  1. Verify backend is running (it shows "🚀 running at port 3001")
+  2. Check: http://localhost:3001/health in browser
+  3. Both must be running on correct ports (3000 and 3001)
+  4. If you changed ports, update client/src/api.js line 1
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                            USING THE APPLICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+QUIZ MODE (Main page):
+──────────────────────
+1. See a random coding question
+2. Question is displayed in markdown with code highlighting
+3. Timer counts down in top-right (circular timer)
+4. Read the question and think about the answer
+5. Click "Reveal Answer" button (or wait for timer)
+6. See the complete solution
+7. Click "Next Question" for another problem
+8. Use filters to select topic or difficulty
+9. Watch your streak counter increase (🔥)
+
+
+ADMIN MODE (Click ⚙️ gear icon in bottom-right):
+─────────────────────────────────────────────────
+1. See list of all questions on the right
+2. Click "New Question" on the left
+3. Fill in:
+   - Topic: JavaScript, Python, etc.
+   - Difficulty: easy, medium, hard
+   - Timer: 45, 60, 90, 120 seconds
+   - Question: Write in markdown (supports code blocks)
+   - Answer: Write in markdown (with solution code)
+4. Click "Create" button
+5. Question appears in the list immediately
+6. Can edit or delete any question
+7. Click "Back to Quiz" or gear icon again to return
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           KEYBOARD SHORTCUTS
+═══════════════════════════════════════════════════════════════════════════════
+
+Browser:
+  F12          Open developer tools
+  CTRL+R       Reload page
+  CTRL+SHIFT+R Hard reload (clear cache)
+  CTRL+SHIFT+K Open console
+
+To stop servers:
+  CTRL+C       In terminal window
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                        WHAT FILES ARE WHAT?
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend (server folder):
+  index.js           - Main server file (runs on port 3001)
+  database/setup.js  - SQLite database initialization
+  package.json       - Dependencies list
+
+Frontend (client folder):
+  src/App.jsx        - Main React component
+  src/pages/QuizPage.jsx     - Quiz interface
+  src/pages/AdminPage.jsx    - Admin panel
+  src/components/*   - Reusable UI components
+  src/api.js         - API calls to backend
+  package.json       - Dependencies list
+
+Database:
+  server/quiz.db     - SQLite database file (auto-created)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         PORTS EXPLANATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Port 3000:  Frontend (React app) - This is what you see in browser
+Port 3001:  Backend (Express API) - Handles data and questions
+
+Think of it like:
+  Port 3000 = The website you see
+  Port 3001 = The engine that powers it
+
+Both must be running for the app to work!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                      TERMINAL COMMANDS QUICK REFERENCE
+═══════════════════════════════════════════════════════════════════════════════
+
+Navigation:
+  cd folder-name      Go into a folder
+  cd ..               Go up one level
+  pwd                 Show current folder (Mac/Linux)
+  dir                 Show current folder (Windows)
+
+Node/npm:
+  node --version      Check Node.js version
+  npm --version       Check npm version
+  npm install         Install dependencies
+  npm start           Start development server
+  npm run build       Build for production
+
+Control:
+  CTRL+C             Stop running server
+  CTRL+L             Clear terminal screen
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              YOU'RE READY!
+═══════════════════════════════════════════════════════════════════════════════
+
+Choose one method above and run the app:
+
+QUICKEST:     Run start.sh or start-windows.bat
+MANUAL:       Follow "STEP 1-4" above in two terminals
+
+Then visit: http://localhost:3000
+
+Happy quizzing! 🎯✨
+
+═══════════════════════════════════════════════════════════════════════════════
