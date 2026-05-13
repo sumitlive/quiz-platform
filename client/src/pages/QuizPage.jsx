@@ -81,6 +81,7 @@ export default function QuizPage({ config, onComplete }) {
   };
 
   const handleNext = () => {
+    timer.pause();
     if (isLastQuestion) {
       // Quiz complete
       onComplete({
