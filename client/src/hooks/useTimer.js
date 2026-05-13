@@ -12,12 +12,12 @@ export function useTimer(initialSeconds, onExpire) {
     onExpireRef.current = onExpire;
   }, [onExpire]);
 
-  const clear = () => {
+  const clear = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  };
+  }, []);
 
   const start = useCallback(() => {
     setIsExpired(false);
@@ -35,7 +35,7 @@ export function useTimer(initialSeconds, onExpire) {
       setCurrentMax(normalizedSeconds);
       setIsRunning(autoStart && normalizedSeconds > 0);
     },
-    [initialSeconds]
+    [initialSeconds, clear]
   );
 
   useEffect(() => {
@@ -47,7 +47,6 @@ export function useTimer(initialSeconds, onExpire) {
     intervalRef.current = setInterval(() => {
       setTimeLeft((t) => {
         if (t <= 1) {
-          clear();
           setIsRunning(false);
           setIsExpired(true);
           onExpireRef.current?.();
@@ -57,8 +56,10 @@ export function useTimer(initialSeconds, onExpire) {
       });
     }, 1000);
 
-    return clear;
-  }, [isRunning]);
+    return () => {
+      clear();
+    };
+  }, [isRunning, clear]);
 
   const progress = currentMax > 0 ? timeLeft / currentMax : 0;
   const isWarning = timeLeft <= 10 && timeLeft > 0;

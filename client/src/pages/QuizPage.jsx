@@ -29,7 +29,6 @@ export default function QuizPage({ config, onComplete }) {
 
   const timeLimit = Number(config?.timePerQuestion) || 60;
   const timer = useTimer(timeLimit, handleExpire);
-  const { reset } = timer;
 
   useEffect(() => {
     api.getTopics().then(setTopics).catch(() => {});
@@ -65,11 +64,11 @@ export default function QuizPage({ config, onComplete }) {
 
   useEffect(() => {
     if (question && !loading) {
-      reset(timeLimit, true);
+      timer.reset(timeLimit, true);
       setShowAnswer(false);
       setAnswered(false);
     }
-  }, [question, loading, reset, timeLimit]);
+  }, [question, loading, timeLimit]);
 
   const handleReveal = () => {
     timer.pause();
