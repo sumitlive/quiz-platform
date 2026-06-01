@@ -444,6 +444,57 @@
     "difficulty": "easy",
     "question": "## 1903. Largest Odd Number in String",
     "answer": "```cpp\nclass Solution {\npublic:\n    string largestOddNumber(string num) {\n        for (int i = num.length() - 1; i >= 0; i--) {\n            if ((num[i] - '0') % 2 == 1) {\n                return num.substr(0, i + 1);\n            }\n        }\n        return \"\";        \n    }\n};\n```"
+  },
+
+  
+  {
+    "id": 4,
+    "topic": "Process",
+    "difficulty": "easy",
+    "question": "### 4. How os creates process",
+    "answer": ""
+  },
+  {
+    "id": 5,
+    "topic": "Process",
+    "difficulty": "easy",
+    "question": "### 5. What is PT",
+    "answer": "Data structure maintained by OS. Contains metadata of every-process. **Each Entry = PCB**"
+  },
+  {
+    "id": 6,
+    "topic": "Process",
+    "difficulty": "medium",
+    "question": "### 6. **Why PCB Needed?**",
+    "answer": "Suppose CPU switches from Process A to Process B.\n\nOS must remember:\n\n- where A stopped\n- CPU register values\n- memory state\n- process status"
+  },
+  {
+    "id": 7,
+    "topic": "Process",
+    "difficulty": "medium",
+    "question": "### 7. PCB structure ?",
+    "answer": "1. **Process ID (PID) -** Unique identifier.\n2. **Process State -** Current state: Running, Ready, Waiting, Terminated\n3. **Program Counter (PC) -** Stores address of next instruction to execute.\n4. **CPU Registers -** Stores process register values."
+  },
+  {
+    "id": 8,
+    "topic": "Process",
+    "difficulty": "easy",
+    "question": "### 8. Explain process states ?",
+    "answer": "- NEW - process is created or program is converted into process. Resides in job queue.\n- Ready - process is waiting to be executed by CPU. Resides in Ready Queue.\n- Running - process is being executed by CPU\n- Waiting - process is waiting for I/O operation"
+  },
+  {
+    "id": 9,
+    "topic": "Process",
+    "difficulty": "medium",
+    "question": "### 9. What is Long term scheduler",
+    "answer": "Job Schedular (Long term schedular (LTS)) picks process from the pool(job queue) and loads them into memory for execution (i.e. ready queue). LTS controls degree of multi-programming i.e. number of processes in the memory"
+  },
+  {
+    "id": 10,
+    "topic": "Process",
+    "difficulty": "medium",
+    "question": "### 10. What is short term scheduler",
+    "answer": "Short term Schedular (Short-term schedular) picks process from ready queue and dispatch it into CPU."
   }
 
 ]
